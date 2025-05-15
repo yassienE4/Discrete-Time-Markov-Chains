@@ -1,6 +1,16 @@
 cmake_minimum_required(VERSION 3.30)
-project(Discrete_Time_Markov_Chains)
+project(DiscreteTimeMarkovChains)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(Discrete_Time_Markov_Chains main.cpp)
+# Include directories
+include_directories(${CMAKE_SOURCE_DIR})
+
+# Source files
+file(GLOB SOURCES
+        "*.cpp"
+)
+
+add_executable(DiscreteTimeMarkovChains ${SOURCES})
+
+
