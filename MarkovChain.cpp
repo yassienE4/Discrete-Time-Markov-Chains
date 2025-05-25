@@ -10,6 +10,7 @@ MarkovChain::MarkovChain(Matrix transitionMatrix, vector<double> initialState)
 
 vector<double> MarkovChain::step()
 {
+    return vector<double>();
 }
 
 void MarkovChain::simulate(int steps)

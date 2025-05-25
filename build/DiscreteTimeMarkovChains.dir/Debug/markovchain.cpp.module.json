@@ -1,0 +1,14 @@
+{
+    "version": 1,
+    "revision": 0,
+    "rules": [
+        {
+            "primary-output": "DiscreteTimeMarkovChains.dir\\Debug\\MarkovChain.obj",
+            "outputs": [
+                "C:\\Users\\jacqu\\Documents\\Discrete-Time-Markov-Chains\\build\\DiscreteTimeMarkovChains.dir\\Debug\\vc143.pdb",
+                "DiscreteTimeMarkovChains.dir\\Debug\\"
+            ],
+            "requires": []
+        }
+    ]
+}

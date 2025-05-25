@@ -32,6 +32,31 @@ vector<vector<double>> multiplyMatrix(const vector<vector<double>>& matrix1, con
     
 }
 
+vector<vector<double>> transposeMatrix(const vector<vector<double>>& matrix)
+{
+    vector<vector<double>> transposed(matrix[0].size(), vector<double>(matrix.size(), 0));
+    for (int i = 0; i < transposed.size(); i++) {
+        for (int j = 0; j < transposed[i].size(); j++) {
+            transposed[j][i] = matrix[i][j];
+        }
+    }
+    return transposed;
+}
+
+bool isConvergent(vector<vector<double>>& matrix)
+{
+    for (int i = 0; i < 65; i++) {
+        matrix = multiplyMatrix(matrix, matrix);
+    }
+    
+    for(int i = 1; i < matrix.size(); i++){
+        if(matrix[i-1] != matrix[i]){
+            return false;
+        }
+    }
+    return true;
+}
+
 
 int main()
 {

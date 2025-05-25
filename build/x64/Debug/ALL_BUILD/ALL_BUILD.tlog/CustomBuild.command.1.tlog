@@ -1,0 +1,10 @@
+^C:\USERS\JACQU\DOCUMENTS\DISCRETE-TIME-MARKOV-CHAINS\CMAKELISTS.TXT
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/jacqu/Documents/Discrete-Time-Markov-Chains -BC:/Users/jacqu/Documents/Discrete-Time-Markov-Chains/build --check-stamp-file C:/Users/jacqu/Documents/Discrete-Time-Markov-Chains/build/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
