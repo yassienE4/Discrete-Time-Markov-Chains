@@ -37,6 +37,10 @@ void MarkovChain::simulate(int steps)
             step();
             stepCount++;
         }
+        else
+        {
+            return;
+        }
     }
 }
 

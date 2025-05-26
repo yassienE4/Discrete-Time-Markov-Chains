@@ -151,7 +151,7 @@ int main()
     {0.0, 0.1, 0.0, 0.0, 0.0, 0.9},
     {0.0, 0.0, 0.1, 0.9, 0.0, 0.0}
     };
-    vector<double> initialState = {1.0, 0.0};  // Starting in state 0
+    vector<double> initialState = {1, 2,3,4,5,6};  // Starting in state 0
 
     MarkovChain mc(transitionMatrix, initialState);
 
@@ -160,7 +160,7 @@ int main()
 
     
     mc.simulate(10000); // Simulate 10000 steps
-    cout << "After:" << mc.getSteadyStateFromSimulation() << "Steps:" << endl;
+    cout << "After: " << mc.getSteadyStateFromSimulation() << " Steps:" << endl;
     mc.printCurrentState();
 
     
