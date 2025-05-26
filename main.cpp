@@ -120,29 +120,26 @@ vector<vector<double>> reduceMatrix(vector<vector<double>> matrix)
 
 int nullity(const vector<vector<double>>& matrix)
 {
-    int nullity = 0;
-   for (int i = 0; i < matrix.size(); i++)
-   {
-       int zeros = 0;
+    int rank = 0;
+    for (int i = 0; i < matrix.size(); i++)
+    {
        for (int j = 0; j < matrix[i].size(); j++)
        {
-           if (matrix[i][j] != 0)
+           if (matrix[i][j] == 1)
            {
-               zeros++;
+                rank++;
            }
        }
-       if (zeros == matrix[i].size())
-       {
-           nullity++;
-       }
-   }
+      
+    }
+    return matrix.size() - rank;
 }
 
 
 int main()
 {
     //test
-    vector<vector<double>> m1 = { {10.5, 0,0, 1.6}, {20, 2,3, 1} ,{35,33,33, 33}, {70,66,66,66} };
+    vector<vector<double>> m1 = { {10.5, 0,0, 1.6}, {20, 2,3, 1} ,{35,33,33, 33}, {1,66,66,66} };
     vector<vector<double>> m2 = { {1, 1}, {2, 2} };
 
 
