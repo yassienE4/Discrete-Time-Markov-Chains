@@ -25,7 +25,8 @@ public:
     // bool hasConverged();
     bool hasCoverged();
     int getSteadyStateFromSimulation();
-    int getSteadyStateCalculation();
+    Matrix getP();
+    void normalize();
     bool compareStates(const vector<double>& state1, const vector<double>& state2);
     
     

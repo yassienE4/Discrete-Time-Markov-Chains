@@ -3,6 +3,7 @@
 //
 
 #include "MarkovChain.h"
+
 #include <iostream>
 
 MarkovChain::MarkovChain(Matrix transitionMatrix, vector<double> initialState)
@@ -46,16 +47,16 @@ void MarkovChain::simulate(int steps)
 
 void MarkovChain::printCurrentState()
 {
-    std::cout << "Current state: [";
-    for (size_t i = 0; i < state.size(); i++)
+    cout << "Current state: [";
+    for (int i = 0; i < state.size(); i++)
     {
-        std::cout << state[i];
+        cout << state[i];
         if (i < state.size() - 1)
         {
-            std::cout << ", ";
+            cout << ", ";
         }
     }
-    std::cout << "]" << std::endl;
+    cout << "]" << endl;
 }
 
 bool MarkovChain::compareStates(const vector<double>& state1, const vector<double>& state2)
@@ -101,6 +102,22 @@ int MarkovChain::getSteadyStateFromSimulation()
     return stepCount;
 }
 
-int MarkovChain::getSteadyStateCalculation()
+void MarkovChain::normalize()
 {
+    double sum = 0;
+    for (int i = 0; i < state.size(); i++)
+    {
+        sum += state[i];
+    }
+    for (int i = 0; i < state.size(); i++)
+    {
+        state[i] /= sum;
+    }
+}
+
+
+
+Matrix MarkovChain::getP()
+{
+    return P;
 }

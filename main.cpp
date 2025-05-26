@@ -136,6 +136,47 @@ int nullity(const vector<vector<double>>& matrix)
     return matrix.size() - rank;
 }
 
+vector<double> getStationaryDistribution(vector<vector<double>> transitionMatrix)
+{
+    const int n = transitionMatrix.size();
+    
+    // Step 1: Create (P - I)^T matrix
+    // We transpose because we want to solve π(P - I) = 0
+    // which is equivalent to (P - I)^T π^T = 0
+    
+    // First subtract identity matrix from P
+    for (int i = 0; i < n; i++) {
+        transitionMatrix[i][i] -= 1.0;  // P - I
+    }
+    
+    // Transpose the matrix
+    vector<vector<double>> augmented = transposeMatrix(transitionMatrix);
+    
+    // Step 2: Add constraint that probabilities sum to 1
+    // Replace the last row with [1, 1, 1, ..., 1, 1]
+    for (int j = 0; j < n; j++) {
+        augmented[n-1][j] = 1.0;
+    }
+    
+    // Add augmented column (right-hand side)
+    for (int i = 0; i < n; i++) {
+        augmented[i].push_back(0.0);  // All zeros except last
+    }
+    augmented[n-1][n] = 1.0;  // Sum constraint = 1
+    
+    // Step 3: Solve using row reduction
+    vector<vector<double>> reduced = reduceMatrix(augmented);
+    
+    // Step 4: Extract solution
+    vector<double> stationary(n);
+    for (int i = 0; i < n; i++) {
+        stationary[i] = reduced[i][n];  // Last column contains solution
+    }
+    
+    return stationary;
+}
+
+
 
 int main()
 {
@@ -155,13 +196,30 @@ int main()
 
     MarkovChain mc(transitionMatrix, initialState);
 
-    cout << "Initial state:" << endl;
+
     mc.printCurrentState();
 
     
-    mc.simulate(10000); // Simulate 10000 steps
+    mc.simulate(10000); // Simulates until convergence or 10000 steps
     cout << "After: " << mc.getSteadyStateFromSimulation() << " Steps:" << endl;
     mc.printCurrentState();
+    cout << "After normalization: " << endl;
+    mc.normalize();
+    mc.printCurrentState();
+    cout << "Steady state calculation: " << endl;
+    vector<double> steadyState = getStationaryDistribution(mc.getP());
+    cout << "Calculated state: [";
+    for (int i = 0; i < steadyState.size(); i++)
+    {
+        cout << steadyState[i];
+        if (i < steadyState.size() - 1)
+        {
+            cout << ", ";
+        }
+    }
+    cout << "]" << endl;
+    
+    
 
     
 
