@@ -57,16 +57,99 @@ bool isConvergent(vector<vector<double>>& matrix)
     return true;
 }
 
+vector<vector<double>> reduceMatrix(vector<vector<double>> matrix)
+{
+    if (matrix.empty() || matrix[0].empty()) {
+        return {};
+    }
+
+    const int rows = matrix.size();
+    const int cols = matrix[0].size();
+    
+    int lead = 0;
+    
+    for (int r = 0; r < rows; r++) {
+        if (lead >= cols) {
+            return matrix;
+        }
+        
+        int i = r;
+        
+        // Find the row with the largest absolute value in the current column
+
+        // we do this to avoid floating point errors if the smallest value is too small
+        // and also to avoid division by zero
+        for (int j = r + 1; j < rows; j++) {
+            if (abs(matrix[j][lead]) > abs(matrix[i][lead])) {
+                i = j;
+            }
+        }
+        
+        // Swap rows if needed
+        if (i != r) {
+            swap(matrix[r], matrix[i]);
+        }
+        
+        // If the lead element is zero, move to next column
+        if (abs(matrix[r][lead]) < 1e-10) {
+            lead++; // increments lead to skip this column
+            r--; // decrement r to stay on the same row for the next iteration
+            continue;
+        }
+        
+        // Scale the current row so that the lead element is 1
+        double divisor = matrix[r][lead];
+        for (int j = 0; j < cols; j++) {
+            matrix[r][j] /= divisor;
+        } // make sure the pivot is 1
+        
+        // Subtract multiples of the current row from all other rows
+        for (int i = 0; i < rows; i++) {
+            if (i != r) {
+                double factor = matrix[i][lead];
+                for (int j = 0; j < cols; j++) {
+                    matrix[i][j] -= factor * matrix[r][j];
+                }
+            }
+        }
+        
+        lead++;
+    }
+    return matrix;
+}
+
+int nullity(const vector<vector<double>>& matrix)
+{
+    int nullity = 0;
+   for (int i = 0; i < matrix.size(); i++)
+   {
+       int zeros = 0;
+       for (int j = 0; j < matrix[i].size(); j++)
+       {
+           if (matrix[i][j] != 0)
+           {
+               zeros++;
+           }
+       }
+       if (zeros == matrix[i].size())
+       {
+           nullity++;
+       }
+   }
+}
+
 
 int main()
 {
     //test
-    vector<vector<double>> m1 = { {1, 1}, {2, 2} };
+    vector<vector<double>> m1 = { {10.5, 0,0, 1.6}, {20, 2,3, 1} ,{35,33,33, 33}, {70,66,66,66} };
     vector<vector<double>> m2 = { {1, 1}, {2, 2} };
 
-    auto result = multiplyMatrix(m1, m2);
 
-    for (const auto& row : result)
+    m1=reduceMatrix(m1);
+    int nullityValue = nullity(m1);
+    cout << "Nullity: " << nullityValue << endl;
+    for (const auto& row : m1)
     {
         for (int val : row)
         {
