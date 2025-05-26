@@ -25,8 +25,18 @@ IE. finding the stationary distribution is equivalent to finding the eigenvector
 4. To solve the equation we get, $P^T  π^T - π^T = 0$, and we factor $π^T$ to get $(P^T-I)π^T=0$, which by the transpose property is equivalent to $π(P - I) = 0$.
 
 In the code,
-We first subtracted the identity matrix from P,
 
+We first subtracted the identity matrix from P, before finding the transpose $(P-I)^T$.
+
+We then needed to augment the matrix, so we replaced the last row with [1,1,1....1], so that we could add a constraint that probabilities sum to 1.
+
+We then add the augmented collumn [0,0,0....1], such that the sum constraint is now 1.
+
+We then reduce the matrix using Guassian Elimination, and we are left with the solution located in the last column of the matrix.
+
+## 3. The results
+
+After testing a collection of Transition Matricies, we found that there is no effective difference between the 2 methods, and both are valid ways of calculating the steady state.
 
 
 
