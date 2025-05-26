@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <MarkovChain.h>
 using namespace std;
 
 
@@ -142,18 +143,52 @@ int main()
     vector<vector<double>> m1 = { {10.5, 0,0, 1.6}, {20, 2,3, 1} ,{35,33,33, 33}, {1,66,66,66} };
     vector<vector<double>> m2 = { {1, 1}, {2, 2} };
 
+    vector<vector<double>> transitionMatrix = {
+        {0.0, 0.9, 0.0, 0.1, 0.0, 0.0},
+    {0.0, 0.0, 0.9, 0.0, 0.1, 0.0},
+    {0.9, 0.0, 0.0, 0.0, 0.0, 0.1},
+    {0.1, 0.0, 0.0, 0.0, 0.9, 0.0},
+    {0.0, 0.1, 0.0, 0.0, 0.0, 0.9},
+    {0.0, 0.0, 0.1, 0.9, 0.0, 0.0}
+    };
+    vector<double> initialState = {1.0, 0.0};  // Starting in state 0
 
-    m1=reduceMatrix(m1);
-    int nullityValue = nullity(m1);
-    cout << "Nullity: " << nullityValue << endl;
-    for (const auto& row : m1)
-    {
-        for (int val : row)
-        {
-            cout << val << "\t";
-        }
-        cout << endl;
-    }
+    MarkovChain mc(transitionMatrix, initialState);
+
+    cout << "Initial state:" << endl;
+    mc.printCurrentState();
+
+    cout << "After one step:" << endl;
+    mc.step();
+    mc.printCurrentState();
+
+    cout << "After 10 more steps:" << endl;
+    mc.simulate(10);
+    mc.printCurrentState();
+
+    cout << "After 10 more steps:" << endl;
+    mc.simulate(10);
+    mc.printCurrentState();
+
+    cout << "After 200 more steps:" << endl;
+    mc.simulate(220);
+    mc.printCurrentState();
+
+    cout << "After 10 more steps:" << endl;
+    mc.simulate(10);
+    mc.printCurrentState();
+    
+    // m1=reduceMatrix(m1);
+    // int nullityValue = nullity(m1);
+    // cout << "Nullity: " << nullityValue << endl;
+    // for (const auto& row : m1)
+    // {
+    //     for (int val : row)
+    //     {
+    //         cout << val << "\t";
+    //     }
+    //     cout << endl;
+    // }
     return 0;
 }
 
