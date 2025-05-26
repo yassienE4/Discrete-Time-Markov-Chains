@@ -23,10 +23,17 @@ public:
     // basically after each step we compare the difference between them and if
     // it is small enough then we can say it converged
     // bool hasConverged();
+    bool hasCoverged();
+    int getSteadyStateFromSimulation();
+    int getSteadyStateCalculation();
+    bool compareStates(const vector<double>& state1, const vector<double>& state2);
+    
     
 private:
     Matrix P;
+    vector<double> previousState;
     vector<double> state;
+    int stepCount = 0;
 };
 
 

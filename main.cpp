@@ -158,37 +158,13 @@ int main()
     cout << "Initial state:" << endl;
     mc.printCurrentState();
 
-    cout << "After one step:" << endl;
-    mc.step();
-    mc.printCurrentState();
-
-    cout << "After 10 more steps:" << endl;
-    mc.simulate(10);
-    mc.printCurrentState();
-
-    cout << "After 10 more steps:" << endl;
-    mc.simulate(10);
-    mc.printCurrentState();
-
-    cout << "After 200 more steps:" << endl;
-    mc.simulate(220);
-    mc.printCurrentState();
-
-    cout << "After 10 more steps:" << endl;
-    mc.simulate(10);
-    mc.printCurrentState();
     
-    // m1=reduceMatrix(m1);
-    // int nullityValue = nullity(m1);
-    // cout << "Nullity: " << nullityValue << endl;
-    // for (const auto& row : m1)
-    // {
-    //     for (int val : row)
-    //     {
-    //         cout << val << "\t";
-    //     }
-    //     cout << endl;
-    // }
+    mc.simulate(10000); // Simulate 10000 steps
+    cout << "After:" << mc.getSteadyStateFromSimulation() << "Steps:" << endl;
+    mc.printCurrentState();
+
+    
+
     return 0;
 }
 

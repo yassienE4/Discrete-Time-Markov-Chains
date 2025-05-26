@@ -32,7 +32,11 @@ void MarkovChain::simulate(int steps)
 {
     for (int i = 0; i < steps; i++)
     {
-        step();
+        if (!hasCoverged())
+        {
+            step();
+            stepCount++;
+        }
     }
 }
 
@@ -48,4 +52,51 @@ void MarkovChain::printCurrentState()
         }
     }
     std::cout << "]" << std::endl;
+}
+
+bool MarkovChain::compareStates(const vector<double>& state1, const vector<double>& state2)
+{
+    if (state1.size() != state2.size())
+    {
+        return false; // States are of different sizes
+    }
+
+    for (int i = 0; i < state1.size(); i++)
+    {
+        if (abs(state1[i] - state2[i]) > 1e-6) // Using a small epsilon for floating-point comparison
+        {
+            return false; // States are not equal
+        }
+    }
+    return true; // States are equal
+}
+
+bool MarkovChain::hasCoverged()
+{
+    if (previousState.empty())
+    {
+        previousState = state; // Initialize previous state
+        return false; // Not converged yet
+    }
+    else
+    {
+        if (compareStates(previousState, state))
+        {
+            return true;
+        }
+        else
+        {
+            previousState = state; // Update previous state
+            return false; // Not converged yet
+        }
+    }
+}
+
+int MarkovChain::getSteadyStateFromSimulation()
+{
+    return stepCount;
+}
+
+int MarkovChain::getSteadyStateCalculation()
+{
 }
