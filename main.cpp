@@ -4,6 +4,20 @@
 #include <cstdlib>
 using namespace std;
 
+void printMatrix(vector<vector<double>> matrix)
+{
+    for (const auto& row : matrix) {
+        cout << "[";
+        for (size_t j = 0; j < row.size(); j++) {
+            cout << row[j];
+            if (j < row.size() - 1) {
+                cout << ", ";
+            }
+        }
+        cout << "]" << endl;
+    }
+}
+
 
 vector<vector<double>> multiplyMatrix(const vector<vector<double>>& matrix1, const vector<vector<double>>& matrix2 )
 {
@@ -69,6 +83,9 @@ vector<vector<double>> reduceMatrix(vector<vector<double>> matrix)
     const int cols = matrix[0].size();
     
     int lead = 0;
+
+    cout << "before reduction:" << endl;
+    printMatrix(matrix);
     
     for (int r = 0; r < rows; r++) {
         if (lead >= cols) {
@@ -86,11 +103,14 @@ vector<vector<double>> reduceMatrix(vector<vector<double>> matrix)
                 i = j;
             }
         }
-        
+
+
         // Swap rows if needed
         if (i != r) {
             swap(matrix[r], matrix[i]);
         }
+        cout<< "after swapping row " << r << " with row " << i << ":" << endl;
+        printMatrix(matrix);
         
         // If the lead element is zero, move to next column
         if (abs(matrix[r][lead]) < 1e-10) {
@@ -98,12 +118,15 @@ vector<vector<double>> reduceMatrix(vector<vector<double>> matrix)
             r--; // decrement r to stay on the same row for the next iteration
             continue;
         }
-        
+
+        cout << "making the pivot 1" << endl;
         // Scale the current row so that the lead element is 1
         double divisor = matrix[r][lead];
         for (int j = 0; j < cols; j++) {
             matrix[r][j] /= divisor;
         } // make sure the pivot is 1
+        
+        printMatrix(matrix);
         
         // Subtract multiples of the current row from all other rows
         for (int i = 0; i < rows; i++) {
@@ -114,9 +137,13 @@ vector<vector<double>> reduceMatrix(vector<vector<double>> matrix)
                 }
             }
         }
+        cout << "making sure rows under pivot are 0 by subtracting" << endl;
+        printMatrix(matrix);
         
         lead++;
     }
+    cout << "after reduction:" << endl;
+    printMatrix(matrix);
     return matrix;
 }
 
@@ -146,25 +173,35 @@ vector<double> getStationaryDistribution(vector<vector<double>> transitionMatrix
     // which is equivalent to (P - I)^T π^T = 0
     
     // First subtract identity matrix from P
+    cout << "Subtracting identity matrix from transition matrix..." << endl;
     for (int i = 0; i < n; i++) {
         transitionMatrix[i][i] -= 1.0;  // P - I
     }
+    printMatrix(transitionMatrix);
     
     // Transpose the matrix
+    cout << "Transposing the matrix..." << endl;
     vector<vector<double>> augmented = transposeMatrix(transitionMatrix);
+    printMatrix(augmented);
     
     // Step 2: Add constraint that probabilities sum to 1
     // Replace the last row with [1, 1, 1, ..., 1, 1]
+    cout << "add constraint that probabilities sum to 1..." << endl;
     for (int j = 0; j < n; j++) {
         augmented[n-1][j] = 1.0;
     }
-    
+    printMatrix(augmented);
+
+    cout << "augmented matrix after adding the constraint:" << endl;
     // Add augmented column (right-hand side)
     for (int i = 0; i < n; i++) {
         augmented[i].push_back(0.0);  // All zeros except last
     }
     augmented[n-1][n] = 1.0;  // Sum constraint = 1
-    
+
+    printMatrix(augmented);
+
+    cout << "reducing the augmented matrix..." << endl;
     // Step 3: Solve using row reduction
     vector<vector<double>> reduced = reduceMatrix(augmented);
     
