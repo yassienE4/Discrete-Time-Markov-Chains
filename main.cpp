@@ -4,8 +4,21 @@
 #include <cstdlib>
 using namespace std;
 
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__) || defined(_WIN64)
+void clearScreenMain() {
+    system("cls");
+}
+#else
+void clearScreenMain() {
+    system("clear");
+}
+#endif
+
+
+int printmatrixcalled = 0;
 void printMatrix(vector<vector<double>> matrix)
 {
+    printmatrixcalled++;
     for (const auto& row : matrix) {
         cout << "[";
         for (size_t j = 0; j < row.size(); j++) {
@@ -16,6 +29,10 @@ void printMatrix(vector<vector<double>> matrix)
         }
         cout << "]" << endl;
     }
+    char next;
+    cout << "Press anything to view next step ";
+    cin >> next;
+    cout << endl;
 }
 
 
@@ -286,6 +303,9 @@ int main()
         }
         markov_chain = new MarkovChain(transitionMatrix1, initialState);
     }
+
+    cout << "We will now use the Power Method to find the stationary distribution of the Markov Chain. enter anything to continue" << endl;
+    cin >> choice;
     
     cout << "Finding the stationary distribution of the Markov Chain by Power Method: " << endl;
     markov_chain->simulate(10000); // Simulates until convergence or 10000 steps
@@ -297,6 +317,10 @@ int main()
     markov_chain->normalize();
     markov_chain->printCurrentState();
 
+
+    cout << "We will now use the stationary equation (input anything to continue): ";
+    cin >> choice;
+    
     cout << "Finding the stationary distribution of the Markov Chain by Stationary Equation: " << endl;
     vector<double> steadyState = getStationaryDistribution(markov_chain->getP());
     cout << "Calculated state: [";
@@ -323,6 +347,28 @@ int main()
             
         }
     }
+
+
+    clearScreenMain();
+
+    cout << "Finding the stationary distribution of the Markov Chain by Power Method: " << endl;
+    cout << "After: " << markov_chain->getSteadyStateFromSimulation() << " Steps:" << endl;
+    markov_chain->printCurrentState();
+    cout << endl;
+    cout << "Finding the stationary distribution of the Markov Chain by Stationary Equation: " << endl;
+    cout << "After: " << printmatrixcalled << " Steps:" << endl;
+    cout << "Calculated state: [";
+    for (int i = 0; i < steadyState.size(); i++)
+    {
+        cout << steadyState[i];
+        if (i < steadyState.size() - 1)
+        {
+            cout << ", ";
+        }
+    }
+    cout << "]" << endl;
+
+    cout << endl;
     
     cout << "Since the two states are  equal, our methods are valid " << endl;
    
