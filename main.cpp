@@ -3,15 +3,7 @@
 #include <MarkovChain.h>
 #include <cstdlib>
 using namespace std;
-#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__) || defined(_WIN64)
-void clearScreen() {
-    system("cls");
-}
-#else
-void clearScreen() {
-    system("clear");
-}
-#endif
+
 
 vector<vector<double>> multiplyMatrix(const vector<vector<double>>& matrix1, const vector<vector<double>>& matrix2 )
 {
@@ -260,6 +252,8 @@ int main()
     
     cout << "Finding the stationary distribution of the Markov Chain by Power Method: " << endl;
     markov_chain->simulate(10000); // Simulates until convergence or 10000 steps
+    cout << "Finding the stationary distribution of the Markov Chain by Power Method: " << endl;
+    markov_chain->printCurrentState();
     cout << "After: " << markov_chain->getSteadyStateFromSimulation() << " Steps:" << endl;
     markov_chain->printCurrentState();
     

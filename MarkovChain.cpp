@@ -6,6 +6,16 @@
 
 #include <iostream>
 
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__) || defined(_WIN64)
+void clearScreen() {
+    system("cls");
+}
+#else
+void clearScreen() {
+    system("clear");
+}
+#endif
+
 MarkovChain::MarkovChain(Matrix transitionMatrix, vector<double> initialState)
 {
     P = transitionMatrix;
@@ -36,6 +46,8 @@ void MarkovChain::simulate(int steps)
         if (!hasCoverged())
         {
             step();
+            printCurrentState();
+            clearScreen();
             stepCount++;
         }
         else
@@ -75,6 +87,8 @@ bool MarkovChain::compareStates(const vector<double>& state1, const vector<doubl
     }
     return true; // States are equal
 }
+
+
 
 bool MarkovChain::hasCoverged()
 {

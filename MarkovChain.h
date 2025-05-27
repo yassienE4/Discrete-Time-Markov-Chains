@@ -28,6 +28,7 @@ public:
     Matrix getP();
     void normalize();
     bool compareStates(const vector<double>& state1, const vector<double>& state2);
+
     
     
 private:
