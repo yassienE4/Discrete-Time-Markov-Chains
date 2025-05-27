@@ -1,3 +1,11 @@
+# How to Build
+
+For the Visualization to work, Run the code from the terminal, not your IDE.
+
+First build the project, (this can be done using your ide).
+
+Then Navigate to "cmake-build-debug" and then click on the executable "DiscreteTimeMarkovChains".
+
 # Code Purpose and Logic
 
 We are trying to verify methods of finding the Stationary Distrubition.
