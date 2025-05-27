@@ -253,7 +253,6 @@ int main()
     cout << "Finding the stationary distribution of the Markov Chain by Power Method: " << endl;
     markov_chain->simulate(10000); // Simulates until convergence or 10000 steps
     cout << "Finding the stationary distribution of the Markov Chain by Power Method: " << endl;
-    markov_chain->printCurrentState();
     cout << "After: " << markov_chain->getSteadyStateFromSimulation() << " Steps:" << endl;
     markov_chain->printCurrentState();
     
