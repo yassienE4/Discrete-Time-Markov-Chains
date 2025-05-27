@@ -274,8 +274,20 @@ int main()
     cout << "]" << endl;
 
     cout << "Comparing the two states: " << endl;
+    for (int i = 0; i < steadyState.size(); i++)
+    {
+        if (abs(steadyState[i] - markov_chain->getCurrent()[i]) > 1e-6)
+        {
+            cout << "The two states are not equal at index " << i << ": " << steadyState[i] << " vs " << markov_chain->getCurrent()[i] << endl;
+            return 1; // Exit if the states are not equal
+        }
+        else
+        {
+            
+        }
+    }
+    
     cout << "Since the two states are  equal, our methods are valid " << endl;
-
    
     
     

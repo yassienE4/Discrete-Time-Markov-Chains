@@ -88,6 +88,10 @@ bool MarkovChain::compareStates(const vector<double>& state1, const vector<doubl
     return true; // States are equal
 }
 
+vector<double> MarkovChain::getCurrent()
+{
+    return state;
+}
 
 
 bool MarkovChain::hasCoverged()
