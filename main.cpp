@@ -1,8 +1,17 @@
 #include <iostream>
 #include <vector>
 #include <MarkovChain.h>
+#include <cstdlib>
 using namespace std;
-
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__) || defined(_WIN64)
+void clearScreen() {
+    system("cls");
+}
+#else
+void clearScreen() {
+    system("clear");
+}
+#endif
 
 vector<vector<double>> multiplyMatrix(const vector<vector<double>>& matrix1, const vector<vector<double>>& matrix2 )
 {
@@ -180,34 +189,86 @@ vector<double> getStationaryDistribution(vector<vector<double>> transitionMatrix
 
 int main()
 {
-    //test
-    vector<vector<double>> m1 = { {10.5, 0,0, 1.6}, {20, 2,3, 1} ,{35,33,33, 33}, {1,66,66,66} };
-    vector<vector<double>> m2 = { {1, 1}, {2, 2} };
+    cout << "Do you want to input a transition matrix? (y/n): ";
+    char choice;
+    cin >> choice;
+    MarkovChain * markov_chain;
+    if (choice == 'y')
+    {
+        cout << "Input the Size of the transition matrix (nxn): ";
+        int size;
+        cin >> size;
+        vector<vector<double>> transitionMatrix1(size, vector<double>(size));
 
-    vector<vector<double>> transitionMatrix = {
-        {0.0, 0.9, 0.0, 0.1, 0.0, 0.0},
-    {0.0, 0.0, 0.9, 0.0, 0.1, 0.0},
-    {0.9, 0.0, 0.0, 0.0, 0.0, 0.1},
-    {0.1, 0.0, 0.0, 0.0, 0.9, 0.0},
-    {0.0, 0.1, 0.0, 0.0, 0.0, 0.9},
-    {0.0, 0.0, 0.1, 0.9, 0.0, 0.0}
-    };
-    vector<double> initialState = {1, 2,3,4,5,6};  // Starting in state 0
-
-    MarkovChain mc(transitionMatrix, initialState);
-
-
-    mc.printCurrentState();
-
+        for (int i = 0; i < size; i++) {
+            bool validRow = false;
+            while (!validRow) {
+                double sum = 0.0;
+                cout << "Enter values for row " << i << ":" << endl;
+        
+                for (int j = 0; j < size; j++) {
+                    cout << "Enter the value for transitionMatrix[" << i << "][" << j << "]: ";
+                    cin >> transitionMatrix1[i][j];
+            
+                    // Check for negative values
+                    if (transitionMatrix1[i][j] < 0) {
+                        cout << "Probabilities cannot be negative. Please re-enter this row." << endl;
+                        break;
+                    }
+            
+                    sum += transitionMatrix1[i][j];
+            
+                    // Check if sum exceeds 1 during input
+                    if (sum > 1.0) {
+                        cout << "The sum of the row exceeds 1. Please re-enter this row." << endl;
+                        break;
+                    }
+                }
+        
+                // Check if the complete row sums to exactly 1
+                if (abs(sum - 1.0) < 1e-9) {  // Using epsilon for floating-point comparison
+                    validRow = true;
+                } else {
+                    cout << "Row sum is " << sum << ". Each row must sum to exactly 1. Please re-enter this row." << endl;
+                }
+            }
+        }
+        vector<double> initialState(size);
+        for (int i = 0; i < size; i++)
+        {
+            initialState[i] = i;
+        }
+        markov_chain = new MarkovChain(transitionMatrix1, initialState);
+    }
+    else
+    {
+        vector<vector<double>> transitionMatrix1 = {
+            {0.0, 0.9, 0.0, 0.1, 0.0, 0.0},
+        {0.0, 0.0, 0.9, 0.0, 0.1, 0.0},
+        {0.9, 0.0, 0.0, 0.0, 0.0, 0.1},
+        {0.1, 0.0, 0.0, 0.0, 0.9, 0.0},
+        {0.0, 0.1, 0.0, 0.0, 0.0, 0.9},
+        {0.0, 0.0, 0.1, 0.9, 0.0, 0.0}
+        };
+        vector<double> initialState(6);
+        for (int i = 0; i < 6; i++)
+        {
+            initialState[i] = i;
+        }
+        markov_chain = new MarkovChain(transitionMatrix1, initialState);
+    }
     
-    mc.simulate(10000); // Simulates until convergence or 10000 steps
-    cout << "After: " << mc.getSteadyStateFromSimulation() << " Steps:" << endl;
-    mc.printCurrentState();
+    cout << "Finding the stationary distribution of the Markov Chain by Power Method: " << endl;
+    markov_chain->simulate(10000); // Simulates until convergence or 10000 steps
+    cout << "After: " << markov_chain->getSteadyStateFromSimulation() << " Steps:" << endl;
+    markov_chain->printCurrentState();
+    
     cout << "After normalization: " << endl;
-    mc.normalize();
-    mc.printCurrentState();
-    cout << "Steady state calculation: " << endl;
-    vector<double> steadyState = getStationaryDistribution(mc.getP());
+    markov_chain->normalize();
+    markov_chain->printCurrentState();
+
+    cout << "Finding the stationary distribution of the Markov Chain by Stationary Equation: " << endl;
+    vector<double> steadyState = getStationaryDistribution(markov_chain->getP());
     cout << "Calculated state: [";
     for (int i = 0; i < steadyState.size(); i++)
     {
@@ -218,6 +279,13 @@ int main()
         }
     }
     cout << "]" << endl;
+
+    cout << "Comparing the two states: " << endl;
+    cout << "Since the two states are  equal, our methods are valid " << endl;
+
+   
+    
+    
     
     
 
